@@ -14,8 +14,7 @@ BITS_PER_BYTE = 8
 
 def encode(bits):
 	"""
-	Returns a new bitarray with the original data bits interleaved with
-	Hamming SECDED parity bits.
+	Returns a new bitarray with the added parity bits for even parity.
 
 	>>> from bitarray import bitarray
 	>>> msg = bytes_to_bits(bytearray(b'\x48\x69\x21')) # "Hi!"
@@ -23,12 +22,42 @@ def encode(bits):
 	>>> msg
 	bitarray('010010000110100100010001')
 	>>> msg_with_parity
-	??
+	bitarray('') ???
 	"""
 	pass
 
 def decode(bits):
 	pass
+
+def data_bits_covered(parity, lim):
+	"""
+	Generator that yields all data bit indices covered by the given parity
+	bit index in the range [1, lim]. Note that all hamming parity bits are
+	placed at powers of two, so it only makes sense to generate the indices
+	for such parities, e.g. parity 1, 2, 4, 8, ...
+
+	>>> [print(x) for x in data_bits_covered(1, 6)]
+	1
+	3
+	5
+	[None, None, None]
+	"""
+	if not is_power_of_two(parity):
+		raise ValueError("All hamming parity bits are indexed by powers of two.")
+
+	i = parity
+	while i <= lim:
+		if (i % (parity << 1)) >= parity:
+			yield i # TODO: Need to convert from total index (i.e. index including parity bits) to just data index and call it in the yield expression. Write helper!!
+		i += 1
+	return None
+
+def is_power_of_two(n):
+	"""
+	Returns true if the given non-negative integer n is a power of two.
+	Algorithm credit: https://stackoverflow.com/questions/600293/how-to-check-if-a-number-is-a-power-of-2
+	"""
+	return (not (n == 0)) and ((n & (n - 1)) == 0)
 
 def bytes_to_bits(byte_stream):
 	"""
@@ -45,7 +74,7 @@ def bytes_to_bits(byte_stream):
 	for byte in byte_stream:
 		data = bin(byte)[2:].zfill(BITS_PER_BYTE)
 		for bit in data:
-			out.append(0 if bit == '0' else 1) # note that all bits go to 1 
+			out.append(0 if bit == '0' else 1) # note that all bits go to 1 if we just append bit, since it's a non-null string
 	return out
 
 def bits_to_bytes(bits):
