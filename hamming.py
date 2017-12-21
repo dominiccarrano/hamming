@@ -29,27 +29,27 @@ def encode(bits):
 def decode(bits):
 	pass
 
+# there's other ways to implement this algorithm... TODO: try drafting out alternatives
+# and comparing performance
 def data_bits_covered(parity, lim):
 	"""
-	Generator that yields all data bit indices covered by the given parity
-	bit index in the range [1, lim]. Note that all hamming parity bits are
-	placed at powers of two, so it only makes sense to generate the indices
-	for such parities, e.g. parity 1, 2, 4, 8, ...
-
-	>>> [print(x) for x in data_bits_covered(1, 6)]
-	1
-	3
-	5
-	[None, None, None]
+	Yields the indices of all data bits covered by a specified parity bit in a bitstring
+	of length lim. The indices are relative to just the data bitstring itself, not including
+	parity bits.
 	"""
 	if not is_power_of_two(parity):
 		raise ValueError("All hamming parity bits are indexed by powers of two.")
 
-	i = parity
-	while i <= lim:
-		if (i % (parity << 1)) >= parity:
-			yield i # TODO: Need to convert from total index (i.e. index including parity bits) to just data index and call it in the yield expression. Write helper!!
-		i += 1
+	data_index  = 1		# the data bit we're currently at (indexed starting at 1)
+	total_index = 3 	# index for parity + data. start at 1-index of first data bit
+						# within entire sequence, which is at 3 since first 2 bits are parity
+
+	while data_index <= lim:
+		curr_bit_is_data = not is_power_of_two(total_index)
+		if curr_bit_is_data and (total_index % (parity << 1)) >= parity:	
+			yield data_index - 1						# adjust output to be zero indexed
+		data_index += curr_bit_is_data
+		total_index += 1
 	return None
 
 def is_power_of_two(n):
@@ -62,8 +62,8 @@ def is_power_of_two(n):
 def bytes_to_bits(byte_stream):
 	"""
 	Converts the given bytearray byte_stream to a bitarray by converting 
-	each successive byte into its appropriate BITS_PER_BYTE binary data bits 
-	and appending them to the bitarray.
+	each successive byte into its appropriate binary data bits and appending 
+	them to the bitarray.
 
 	>>> from bitarray import bitarray
 	>>> foo = bytearray(b'\x11\x23\x6C')

@@ -60,11 +60,88 @@ def bytes_to_bits_tests():
 	bytes_to_bits_test2()
 	bytes_to_bits_test3()
 
+# tests for hamming.data_bits_covered
+
+def data_bits_covered_test1():
+	actual = [x for x in hamming.data_bits_covered(1, 14)]
+	expected = [0, 1, 3, 4, 6, 8, 10, 11, 13]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test2():
+	actual = [x for x in hamming.data_bits_covered(2, 7)]
+	expected = [0, 2, 3, 5, 6]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test3():
+	actual = [x for x in hamming.data_bits_covered(1, 33)]
+	expected = [0, 1, 3, 4, 6, 8, 10, 11, 13, 15, 17, 19, 21, 23, 25, 26, 28, 30, 32]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test4():
+	actual = [x for x in hamming.data_bits_covered(1, 1)]
+	expected = [0]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test5():
+	actual = [x for x in hamming.data_bits_covered(2, 1)]
+	expected = [0]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test6():
+	actual = [x for x in hamming.data_bits_covered(4, 1)]
+	expected = []
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test7():
+	actual = [x for x in hamming.data_bits_covered(4, 15)]
+	expected = [1, 2, 3, 7, 8, 9, 10, 14]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test8():
+	actual = [x for x in hamming.data_bits_covered(4, 14)]
+	expected = [1, 2, 3, 7, 8, 9, 10]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test9():
+	actual = [x for x in hamming.data_bits_covered(8, 13)]
+	expected = [4, 5, 6, 7, 8, 9, 10]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test10():
+	actual = [x for x in hamming.data_bits_covered(8, 3)]
+	expected = []
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test11():
+	actual = [x for x in hamming.data_bits_covered(16, 11)]
+	expected = []
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_test12():
+	actual = [x for x in hamming.data_bits_covered(16, 24)]
+	expected = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def data_bits_covered_tests():
+	data_bits_covered_test1()
+	data_bits_covered_test2()
+	data_bits_covered_test3()
+	data_bits_covered_test4()
+	data_bits_covered_test5()
+	data_bits_covered_test6()
+	data_bits_covered_test7()
+	data_bits_covered_test8()
+	data_bits_covered_test9()
+	data_bits_covered_test10()
+	data_bits_covered_test11()
+	data_bits_covered_test12()
+
 # put it all together
 
 def run_tests():
 	bits_to_bytes_tests()
 	bytes_to_bits_tests()
+	data_bits_covered_tests()
 
 def main():
 	run_tests()
