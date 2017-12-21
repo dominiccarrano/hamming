@@ -13,17 +13,6 @@ import bitarray
 BITS_PER_BYTE = 8
 
 def encode(bits):
-	"""
-	Returns a new bitarray with the added parity bits for even parity.
-
-	>>> from bitarray import bitarray
-	>>> msg = bytes_to_bits(bytearray(b'\x48\x69\x21')) # "Hi!"
-	>>> msg_with_parity = encode(msg)
-	>>> msg
-	bitarray('010010000110100100010001')
-	>>> msg_with_parity
-	bitarray('') ???
-	"""
 	pass
 
 def decode(bits):
