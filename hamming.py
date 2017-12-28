@@ -6,6 +6,9 @@ Created:	December 18, 2017
 Implementation of Hamming single error correction, double error detection
 (SECDED) codes for bitstrings. Supports encoding of bit and bytearrays as
 a bitarray, as well as error detection/correction of bitarrays to decode.
+
+TODO: Design/implement/test encode(), decode(), and research linear-algebraic
+implementation of Hamming codes for potential comparison to current lexicographic method.
 """
 
 import bitarray
@@ -15,13 +18,19 @@ BITS_PER_BYTE = 8
 def encode(bits):
 	"""
 	Takes in a bitstring of data and returns a new bitstring composed of the original
-	data and Hamming even parity bits.
+	data and Hamming even parity bits for SECDED encoding.
 
 	bits: The data bitsting to encode.
 	"""
 	pass
 
 def decode(bits):
+	"""
+	Takes in a Hamming SECDED encoded bitstring and returns the original data bitstring,
+	correcting single errors and reporting if two errors are found.
+
+	bits: The parity-encoded bitsting to decode.
+	"""
 	pass
 
 def calculate_parity(data, parity):
