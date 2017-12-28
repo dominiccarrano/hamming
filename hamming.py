@@ -13,13 +13,28 @@ import bitarray
 BITS_PER_BYTE = 8
 
 def encode(bits):
+	"""
+	Takes in a bitstring of data and returns a new bitstring composed of the original
+	data and Hamming even parity bits.
+
+	bits: The data bitsting to encode.
+	"""
 	pass
 
 def decode(bits):
 	pass
 
-# there's other ways to implement this algorithm... TODO: try drafting out alternatives
-# and comparing performance
+def calculate_parity(data, parity):
+	"""
+	Calculates the specified Hamming parity bit (1, 2, 4, 8, etc.) for the given data.
+	Computing the parity over the entire sequence is left to other functions.
+	Assumes even parity to allow for easier computation of parity using XOR.
+	"""
+	retval = 0 		# 0 is the XOR identity
+	for data_index in data_bits_covered(parity, len(data)):
+		retval ^= data[data_index]
+	return retval
+
 def data_bits_covered(parity, lim):
 	"""
 	Yields the indices of all data bits covered by a specified parity bit in a bitstring
@@ -29,9 +44,11 @@ def data_bits_covered(parity, lim):
 	if not is_power_of_two(parity):
 		raise ValueError("All hamming parity bits are indexed by powers of two.")
 
-	data_index  = 1		# the data bit we're currently at (indexed starting at 1)
-	total_index = 3 	# index for parity + data. start at 1-index of first data bit
-						# within entire sequence, which is at 3 since first 2 bits are parity
+	# use 1-based indexing for simpler computational logic, subtract 1 in body of loop
+	# to get proper zero-based result
+	data_index  = 1		# the data bit we're currently at
+	total_index = 3 	# index of bit if it were in the parity-encoded bitstring - 
+						# the first two bits are p1 and p2, so we start at 3
 
 	while data_index <= lim:
 		curr_bit_is_data = not is_power_of_two(total_index)
@@ -90,7 +107,7 @@ def bits_to_bytes(bits):
 			k += 1
 		out.append(byte)
 
-	# tail case
+	# tail case - necessary if bitstring length isn't a multiple of 8
 	if len(bits) % BITS_PER_BYTE:
 		byte, k = 0, 0
 		for bit in bits[int(len(bits) // BITS_PER_BYTE * BITS_PER_BYTE):][::-1]:
