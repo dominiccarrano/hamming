@@ -14,7 +14,6 @@ implementation of Hamming codes for potential comparison to current lexicographi
 import bitarray
 
 BITS_PER_BYTE = 8
-parity_bits_needed = {1: 2, }
 
 def encode(bits):
 	"""
