@@ -14,6 +14,7 @@ implementation of Hamming codes for potential comparison to current lexicographi
 import bitarray
 
 BITS_PER_BYTE = 8
+parity_bits_needed = {1: 2, }
 
 def encode(bits):
 	"""
@@ -32,6 +33,38 @@ def decode(bits):
 	bits: The parity-encoded bitsting to decode.
 	"""
 	pass
+
+def num_parity_bits_needed(length):
+	"""
+	Returns the number of parity bits needed for a bitstring of size length, not
+	inclduing the parity bit over the entire sequence for double detection.
+	"""
+	# TODO: this is a really lazy implementation.. should probably come back and use
+	# a dictionary lookup or try finding a general expression for the # parity bits
+	# needed for k data bits in general, although couldn't find such a formula after
+	# ~30 mins of searching.
+	if type(length) != int or length <= 0:
+		raise ValueError("Length must be a positive integer.")
+	elif length == 1:
+		return 2
+	elif length <= 4:
+		return 3
+	elif length <= 11:
+		return 4
+	elif length <= 26:
+		return 5
+	elif length <= 57:
+		return 6
+	elif length <= 120:
+		return 7
+	elif length <= 247:
+		return 8
+	elif length <= 502:
+		return 9
+	elif length <= 1013:
+		return 10
+	else:
+		raise ValueError("Bitstring length must be no greater than 1013 bits.")
 
 def calculate_parity(data, parity):
 	"""
