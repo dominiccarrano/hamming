@@ -15,6 +15,8 @@ from bitarray import bitarray
 
 BITS_PER_BYTE = 8
 
+# CORE API
+
 def encode(data):
 	"""
 	Takes in a bitstring of data and returns a new bitstring composed of the original
@@ -22,10 +24,15 @@ def encode(data):
 
 	data: The data bitsting to encode.
 	"""
-	encoded = bitarray(len(data) + num_parity_bits_needed(data) + 1) # need plus 1 for parity over entire sequence
+	# cache due to constant reuse
+	data_length = len(data) 
+	num_parity_bits = num_parity_bits_needed(data_length)
+
+	# the Hamming SECDED encoded bitstring
+	encoded = bitarray(data_length + num_parity_bits + 1) # need plus 1 for parity over entire sequence
 	
 	# set parity bits
-	for parity_bit_index in powers_of_two(len(data)):
+	for parity_bit_index in powers_of_two(num_parity_bits):
 		encoded[parity_bit_index] = calculate_parity(data, parity_bit_index)
 	
 	# set data bits
@@ -52,6 +59,9 @@ def decode(data):
 	bits: The parity-encoded bitsting to decode.
 	"""
 	pass
+
+
+# EVERYTHING BELOW HERE IS A HELPER FUNCTION
 
 def num_parity_bits_needed(length):
 	"""
@@ -139,7 +149,7 @@ def powers_of_two(n):
 	16
 	"""
 	power, i = 1, 0
-	while i <= n:
+	while i < n:
 		yield power
 		power = power << 1
 		i += 1
