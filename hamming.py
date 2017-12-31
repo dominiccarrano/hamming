@@ -4,11 +4,11 @@ Author:		Dominic Carrano (carrano.dominic@gmail.com)
 Created:	December 18, 2017
 
 Implementation of Hamming single error correction, double error detection
-(SECDED) codes for bitstrings. Supports encoding of bit and bytearrays as
-a bitarray, as well as error detection/correction of bitarrays to decode.
+(SECDED) codes for bitstrings, which are represented as Python bitarrays.
 
-TODO: Design/implement/test encode(), decode(), and research linear-algebraic
-implementation of Hamming codes for potential comparison to current lexicographic method.
+For more, see: 
+https://en.wikipedia.org/wiki/Hamming_code
+https://en.wikipedia.org/wiki/Hamming_code#Hamming_codes_with_additional_parity_(SECDED)
 """
 
 from bitarray import bitarray
@@ -62,13 +62,11 @@ def decode(encoded):
 	Throws
 	ValueError: if two errors are detected.
 	"""
-	#encoded_length  = len(encoded)
-	#num_parity_bits = int(log2(encoded_length - 1)) # subtract 1 since overall parity is accounted for separately from num_parity_bits_needed
-	#decoded_length  = encoded_length - num_parity_bits - 1 # subtract 1 for the overall parity bit
-	#data_bits       = extract_data(encoded)			# (possibly corrupted) data bits from the bitstring
+	encoded_length  = len(encoded)
+	num_parity_bits = int(log2(encoded_length))
 	index_of_error  = 0								# the bit in error
 
-	# the original data, as extracted (and potentially corrected) from the given bitstring
+	# the original data bits, which may be corrupted
 	decoded = extract_data(encoded)
 
 	# check overall parity
@@ -87,9 +85,9 @@ def decode(encoded):
 	if index_of_error and overall_correct:			# two errors found
 		raise ValueError("Two errors detected.")
 	elif index_of_error and not overall_correct:	# one error found - flip the bit in error and we're good
-		encoded[index_of_error] = ~encoded[index_of_error]
+		encoded[index_of_error] = not encoded[index_of_error]
 
-	decoded = extract_data(encoded)					# extract corrected data and return it
+	decoded = extract_data(encoded)					# extract new, corrected data and return it
 	return decoded
 
 
@@ -176,7 +174,7 @@ def extract_data(encoded):
 	data = bitarray()
 	for i in range(3, len(encoded)):
 		if not is_power_of_two(i):
-			data += encoded[i]
+			data.append(encoded[i])
 	return data
 
 def is_power_of_two(n):

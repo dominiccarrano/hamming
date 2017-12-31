@@ -139,20 +139,52 @@ def data_bits_covered_tests():
 # tests for hamming.encode
 
 def encode_test1():
-	data = bitarray('0011')
-	actual = hamming.encode(data)
-	expected = bitarray('11000011')	# p1 = 1, p2 = 0, p4 = 0, total = 1
+	data     = bitarray('0011')
+	actual   = hamming.encode(data)
+	expected = bitarray('11000011')	# p1 = 1, p2 = 0, p4 = 0, overall = 1
 	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
 
 def encode_test2():
-	data = bitarray('01100100110')
-	actual = hamming.encode(data)
-	expected = bitarray('1010011010100110') # p1 = 0, p2 = 1, p4 = 0, p8 = 1, total = 1
+	data     = bitarray('01100100110')
+	actual   = hamming.encode(data)
+	expected = bitarray('1010011010100110') # p1 = 0, p2 = 1, p4 = 0, p8 = 1, overall = 1
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def encode_test3():
+	data     = bitarray('0011')
+	actual   = hamming.encode(data)
+	expected = bitarray('11000011') # p1 = 1, p2 = 0, p4 = 0, overall = 1
 	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
 
 def encode_tests():
 	encode_test1()
 	encode_test2()
+	encode_test3()
+
+# tests for hamming.decode
+
+def decode_test1():
+	encoded  = bitarray('00110111') # bit 5 in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('1011') 
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def decode_test2():
+	encoded  = bitarray('11001000') # bit 5 in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('0100') 
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def decode_test3():
+	encoded  = bitarray('1010011010000110') # bit 10 in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('01100100110') 
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
+
+def decode_tests():
+	decode_test1()
+	decode_test2()
+	decode_test3()
 
 # put it all together
 
@@ -161,6 +193,7 @@ def run_tests():
 	bytes_to_bits_tests()
 	data_bits_covered_tests()
 	encode_tests()
+	decode_tests()
 
 def main():
 	run_tests()
