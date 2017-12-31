@@ -27,9 +27,9 @@ def encode(data):
 	data: The data bitsting to encode.
 	"""
 	# cache due to constant reuse
-	data_length = len(data) 
+	data_length     = len(data) 
 	num_parity_bits = num_parity_bits_needed(data_length)
-	encoded_length = data_length + num_parity_bits + 1 # need plus 1 for parity bit over entire sequence
+	encoded_length  = data_length + num_parity_bits + 1 # need plus 1 for parity bit over entire sequence
 
 	# the Hamming SECDED encoded bitstring
 	encoded = bitarray(encoded_length) 
@@ -45,9 +45,10 @@ def encode(data):
 			encoded[encoded_index] = data[data_index]
 			data_index += 1
 
-	# compute and set overall parity for the entire encoded data
-	encoded[0] = calculate_parity(encoded, 0)
+	# compute and set overall parity for the entire encoded data, not including the overall parity bit itself
+	encoded[0] = calculate_parity(encoded[1:], 0)
 
+	# all done!
 	return encoded
 
 def decode(encoded):
@@ -61,16 +62,34 @@ def decode(encoded):
 	Throws
 	ValueError: if two errors are detected.
 	"""
-	encoded_length = len(encoded)
-	num_parity_bits = int(log2(encoded_length - 1)) # subtract 1 since overall parity is accounted for separately from num_parity_bits_needed
-	decoded_length = encoded_length - num_parity_bits - 1 # subtract 1 for the overall parity bit
+	#encoded_length  = len(encoded)
+	#num_parity_bits = int(log2(encoded_length - 1)) # subtract 1 since overall parity is accounted for separately from num_parity_bits_needed
+	#decoded_length  = encoded_length - num_parity_bits - 1 # subtract 1 for the overall parity bit
+	#data_bits       = extract_data(encoded)			# (possibly corrupted) data bits from the bitstring
+	index_of_error  = 0								# the bit in error
 
 	# the original data, as extracted (and potentially corrected) from the given bitstring
-	decoded = bitarray(decoded_length) 
+	decoded = extract_data(encoded)
 
+	# check overall parity
+	overall_expected = calculate_parity(encoded[1:], 0)
+	overall_actual   = encoded[0]
+	overall_correct  = overall_expected == overall_actual
 
+	# check individual parities
+	for parity_bit_index in powers_of_two(num_parity_bits):
+		expected = calculate_parity(decoded, parity_bit_index) # TODO: no need for 'data_bits' variable if we had a version of calculate_parity relative to the total bitstring
+		actual   = encoded[parity_bit_index]
+		if not expected == actual:
+			index_of_error += parity_bit_index
 
-	# voila!
+	
+	if index_of_error and overall_correct:			# two errors found
+		raise ValueError("Two errors detected.")
+	elif index_of_error and not overall_correct:	# one error found - flip the bit in error and we're good
+		encoded[index_of_error] = ~encoded[index_of_error]
+
+	decoded = extract_data(encoded)					# extract corrected data and return it
 	return decoded
 
 
@@ -149,6 +168,16 @@ def data_bits_covered(parity, lim):
 		data_index += curr_bit_is_data
 		total_index += 1
 	return None
+
+def extract_data(encoded):
+	"""
+	Assuming encoded is a Hamming SECDED encoded bitstring, returns the substring that is the data bits.
+	"""
+	data = bitarray()
+	for i in range(3, len(encoded)):
+		if not is_power_of_two(i):
+			data += encoded[i]
+	return data
 
 def is_power_of_two(n):
 	"""
