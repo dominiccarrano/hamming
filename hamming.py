@@ -11,7 +11,7 @@ TODO: Design/implement/test encode(), decode(), and research linear-algebraic
 implementation of Hamming codes for potential comparison to current lexicographic method.
 """
 
-import bitarray
+from bitarray import bitarray
 
 BITS_PER_BYTE = 8
 
@@ -22,7 +22,7 @@ def encode(data):
 
 	data: The data bitsting to encode.
 	"""
-	encoded = bitarray.bitarray(len(data) + num_parity_bits_needed(data) + 1) # need plus 1 for parity over entire sequence
+	encoded = bitarray(len(data) + num_parity_bits_needed(data) + 1) # need plus 1 for parity over entire sequence
 	
 	# set parity bits
 	for parity_bit_index in powers_of_two(len(data)):
@@ -156,7 +156,7 @@ def bytes_to_bits(byte_stream):
 	>>> bytes_to_bits(foo)
 	bitarray('000100010010001101101100')
 	"""
-	out = bitarray.bitarray()
+	out = bitarray()
 	for byte in byte_stream:
 		data = bin(byte)[2:].zfill(BITS_PER_BYTE)
 		for bit in data:

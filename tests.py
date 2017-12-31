@@ -136,12 +136,25 @@ def data_bits_covered_tests():
 	data_bits_covered_test11()
 	data_bits_covered_test12()
 
+# tests for hamming.encode
+
+def encode_test1():
+	pass
+
+def encode_test2():
+	pass
+
+def encode_tests():
+	encode_test1()
+	encode_test2()
+
 # put it all together
 
 def run_tests():
 	bits_to_bytes_tests()
 	bytes_to_bits_tests()
 	data_bits_covered_tests()
+	encode_tests()
 
 def main():
 	run_tests()
