@@ -15,16 +15,36 @@ import bitarray
 
 BITS_PER_BYTE = 8
 
-def encode(bits):
+def encode(data):
 	"""
 	Takes in a bitstring of data and returns a new bitstring composed of the original
 	data and Hamming even parity bits for SECDED encoding.
 
-	bits: The data bitsting to encode.
+	data: The data bitsting to encode.
 	"""
-	pass
+	encoded = bitarray.bitarray(len(data) + num_parity_bits_needed(data) + 1) # need plus 1 for parity over entire sequence
+	
+	# set parity bits
+	for parity_bit_index in powers_of_two(len(data)):
+		encoded[parity_bit_index] = calculate_parity(data, parity_bit_index)
+	
+	# set data bits
+	data_index = 0
+	for encoded_index in range(3, len(encoded)): # start at 3 instead of 1 to skip first two parity bits
+		if not is_power_of_two(encoded_index):
+			encoded[encoded_index] = data[data_index]
+			data_index += 1
 
-def decode(bits):
+	# compute and set parity bit over the whole sequence at position zero (for even parity)
+	total_parity = 0
+	for i in range(1, len(encoded)):
+		total_parity ^= encoded[i]
+	encoded[0] = total_parity
+
+	# voila!
+	return encoded
+
+def decode(data):
 	"""
 	Takes in a Hamming SECDED encoded bitstring and returns the original data bitstring,
 	correcting single errors and reporting if two errors are found.
@@ -105,6 +125,25 @@ def is_power_of_two(n):
 	Algorithm credit: https://stackoverflow.com/questions/600293/how-to-check-if-a-number-is-a-power-of-2
 	"""
 	return (not (n == 0)) and ((n & (n - 1)) == 0)
+
+def powers_of_two(n):
+	"""
+	Yields the first n powers of two.
+
+	>>> for x in powers_of_two(5):
+	>>> 	print(x)
+	1
+	2
+	4
+	8
+	16
+	"""
+	power, i = 1, 0
+	while i <= n:
+		yield power
+		power = power << 1
+		i += 1
+	return None
 
 def bytes_to_bits(byte_stream):
 	"""
