@@ -12,6 +12,7 @@ implementation of Hamming codes for potential comparison to current lexicographi
 """
 
 from bitarray import bitarray
+from math import log2
 
 BITS_PER_BYTE = 8
 
@@ -22,14 +23,16 @@ def encode(data):
 	Takes in a bitstring of data and returns a new bitstring composed of the original
 	data and Hamming even parity bits for SECDED encoding.
 
+	Parameters
 	data: The data bitsting to encode.
 	"""
 	# cache due to constant reuse
 	data_length = len(data) 
 	num_parity_bits = num_parity_bits_needed(data_length)
+	encoded_length = data_length + num_parity_bits + 1 # need plus 1 for parity bit over entire sequence
 
 	# the Hamming SECDED encoded bitstring
-	encoded = bitarray(data_length + num_parity_bits + 1) # need plus 1 for parity over entire sequence
+	encoded = bitarray(encoded_length) 
 	
 	# set parity bits
 	for parity_bit_index in powers_of_two(num_parity_bits):
@@ -42,26 +45,36 @@ def encode(data):
 			encoded[encoded_index] = data[data_index]
 			data_index += 1
 
-	# compute and set parity bit over the whole sequence at position zero (for even parity)
-	total_parity = 0
-	for i in range(1, len(encoded)):
-		total_parity ^= encoded[i]
-	encoded[0] = total_parity
+	# compute and set overall parity for the entire encoded data
+	encoded[0] = calculate_parity(encoded, 0)
 
-	# voila!
 	return encoded
 
-def decode(data):
+def decode(encoded):
 	"""
 	Takes in a Hamming SECDED encoded bitstring and returns the original data bitstring,
-	correcting single errors and reporting if two errors are found.
+	correcting single errors (with no reporting) and reporting if two errors are found.
 
-	bits: The parity-encoded bitsting to decode.
+	Parameters
+	encoded: The parity-encoded bitsting to decode.
+
+	Throws
+	ValueError: if two errors are detected.
 	"""
-	pass
+	encoded_length = len(encoded)
+	num_parity_bits = int(log2(encoded_length - 1)) # subtract 1 since overall parity is accounted for separately from num_parity_bits_needed
+	decoded_length = encoded_length - num_parity_bits - 1 # subtract 1 for the overall parity bit
+
+	# the original data, as extracted (and potentially corrected) from the given bitstring
+	decoded = bitarray(decoded_length) 
 
 
-# EVERYTHING BELOW HERE IS A HELPER FUNCTION
+
+	# voila!
+	return decoded
+
+
+# HELPER FUNCTIONS
 
 def num_parity_bits_needed(length):
 	"""
@@ -95,21 +108,29 @@ def num_parity_bits_needed(length):
 	else:
 		raise ValueError("Bitstring length must be no greater than 1013 bits.")
 
+
 def calculate_parity(data, parity):
 	"""
 	Calculates the specified Hamming parity bit (1, 2, 4, 8, etc.) for the given data.
-	Computing the parity over the entire sequence is left to other functions.
 	Assumes even parity to allow for easier computation of parity using XOR.
+
+	If 0 is passed in to parity, then the overall parity is computed - that is, parity over
+	the entire sequence.
 	"""
 	retval = 0 		# 0 is the XOR identity
-	for data_index in data_bits_covered(parity, len(data)):
-		retval ^= data[data_index]
+
+	if parity == 0: # special case - compute the overall parity
+		for bit in data:
+			retval ^= bit
+	else:
+		for data_index in data_bits_covered(parity, len(data)):
+			retval ^= data[data_index]
 	return retval
 
 def data_bits_covered(parity, lim):
 	"""
 	Yields the indices of all data bits covered by a specified parity bit in a bitstring
-	of length lim. The indices are relative to just the data bitstring itself, not including
+	of length lim. The indices are relative to DATA BITSTRING ITSELF, NOT including
 	parity bits.
 	"""
 	if not is_power_of_two(parity):
