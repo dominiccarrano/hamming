@@ -139,10 +139,16 @@ def data_bits_covered_tests():
 # tests for hamming.encode
 
 def encode_test1():
-	pass
+	data = bitarray('0011')
+	actual = hamming.encode(data)
+	expected = bitarray('11000011')	# p1 = 1, p2 = 0, p4 = 0, total = 1
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
 
 def encode_test2():
-	pass
+	data = bitarray('01100100110')
+	actual = hamming.encode(data)
+	expected = bitarray('1010011010100110') # p1 = 0, p2 = 1, p4 = 0, p8 = 1, total = 1
+	assert actual == expected, "TEST FAILED! Expected: {0}, Actual: {1}".format(expected, actual)
 
 def encode_tests():
 	encode_test1()
