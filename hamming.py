@@ -11,6 +11,8 @@ https://en.wikipedia.org/wiki/Hamming_code
 https://en.wikipedia.org/wiki/Hamming_code#Hamming_codes_with_additional_parity_(SECDED)
 """
 
+# TODO: Goal - get this file under ~150 lines
+
 from bitarray import bitarray
 from math import log2
 
@@ -81,7 +83,7 @@ def decode(encoded):
 		if not expected == actual:
 			index_of_error += parity_bit_index
 
-	
+	# report results
 	if index_of_error and overall_correct:			# two errors found
 		raise ValueError("Two errors detected.")
 	elif index_of_error and not overall_correct:	# one error found - flip the bit in error and we're good
@@ -98,10 +100,7 @@ def num_parity_bits_needed(length):
 	Returns the number of parity bits needed for a bitstring of size length, not
 	inclduing the parity bit over the entire sequence for double detection.
 	"""
-	# TODO: this is a really lazy implementation.. should probably come back and use
-	# a dictionary lookup or try finding a general expression for the # parity bits
-	# needed for k data bits in general, although couldn't find such a formula after
-	# ~30 mins of searching.
+	# TODO: generalize for any length
 	if type(length) != int or length <= 0:
 		raise ValueError("Length must be a positive integer.")
 	elif length == 1:
@@ -122,6 +121,10 @@ def num_parity_bits_needed(length):
 		return 9
 	elif length <= 1013:
 		return 10
+	elif length <= 2037: 
+		return 11
+	elif length <= 4084:
+		return 12
 	else:
 		raise ValueError("Bitstring length must be no greater than 1013 bits.")
 
@@ -188,31 +191,20 @@ def powers_of_two(n):
 	"""
 	Yields the first n powers of two.
 
-	>>> for x in powers_of_two(5):
-	>>> 	print(x)
-	1
-	2
-	4
-	8
-	16
+	>>> [x for x in powers_of_two(5)]
+	[1, 2, 4, 8, 16]
 	"""
 	power, i = 1, 0
 	while i < n:
 		yield power
-		power = power << 1
+		power <<= 1
 		i += 1
 	return None
 
 def bytes_to_bits(byte_stream):
 	"""
-	Converts the given bytearray byte_stream to a bitarray by converting 
-	each successive byte into its appropriate binary data bits and appending 
-	them to the bitarray.
-
-	>>> from bitarray import bitarray
-	>>> foo = bytearray(b'\x11\x23\x6C')
-	>>> bytes_to_bits(foo)
-	bitarray('000100010010001101101100')
+	Converts the given bytearray to a bitarray by converting  each successive byte into its 
+	appropriate binary data bits and appending them to the bitarray.
 	"""
 	out = bitarray()
 	for byte in byte_stream:
@@ -225,17 +217,8 @@ def bits_to_bytes(bits):
 	"""
 	Converts the given bitarray bits to a bytearray. 
 
-	Assumes the last len(bits) - len(bits) / 8 * 8 bits are to 
-	be interpreted as the least significant bits of the last byte 
-	of data, e.g. 100 would map to the byte 00000100.
-
-	>>> from bitarray import bitarray
-	>>> foo = bitarray('100')
-	>>> bits_to_bytes(foo)
-	bytearray(b'\x04')
-	>>> bar = bitarray('1010110011111111001100011000')
-	>>> bits_to_bytes(bar)
-	bytearray(b'\xAC\xFF\x31\x08')
+	Assumes the last len(bits) - len(bits) / 8 * 8 bits are to  be interpreted as the least 
+	significant bits of the last byte of data, e.g. 0b100 would map to the byte 0b00000100.
 	"""
 	out = bytearray()
 	for i in range(0, len(bits) // BITS_PER_BYTE * BITS_PER_BYTE, BITS_PER_BYTE):

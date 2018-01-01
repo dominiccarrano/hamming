@@ -210,7 +210,7 @@ def run_tests():
 	b = bytes_to_bits_tests()
 	c = data_bits_covered_tests()
 	d = decode_tests()
-	e =	encode_tests()
+	e = encode_tests()
 	return (a[0] + b[0] + c[0] + d[0] + e[0], a[1] + b[1] + c[1] + d[1] + e[1])
 
 def main():
