@@ -5,10 +5,9 @@ Created:	December 18, 2017
 
 Implementation of Hamming single error correction, double error detection
 (SECDED) codes for arbitrary length bitstrings, represented as Python bitarrays.
+All parity bits use even parity.
 
-For more, see: 
-https://en.wikipedia.org/wiki/Hamming_code
-https://en.wikipedia.org/wiki/Hamming_code#Hamming_codes_with_additional_parity_(SECDED)
+For more, see: https://en.wikipedia.org/wiki/Hamming_code
 """
 
 from bitarray import bitarray
@@ -20,11 +19,8 @@ BITS_PER_BYTE = 8
 
 def encode(data):
 	"""
-	Takes in a bitstring of data and returns a new bitstring composed of the original
-	data and Hamming even parity bits for SECDED encoding.
-
-	Parameters
-	data: The data bitsting to encode.
+	Given a bitstring 'data', returns a new bitstring containing the original bits
+	and Hamming (even) parity bits to allow for SECDED.
 	"""
 	# cache due to constant reuse
 	data_length     = len(data) 
@@ -53,7 +49,7 @@ def encode(data):
 
 def decode(encoded):
 	"""
-	Given a bitstring "encoded" with Hamming SECDED parity, returns the original data bitstring,
+	Given a bitstring 'encoded' with Hamming SECDED parity bits, returns the original data bitstring,
 	correcting single errors and reporting if two errors are found.
 	"""
 	encoded_length  = len(encoded)
@@ -183,7 +179,7 @@ def _powers_of_two(n):
 	return None
 
 # Further utility functions - not used anywhere in hamming.py, but would be useful for dealing with
-# Hamming codes of bytearrays (e.g., strings) that could be transmitted over a network, for instance
+# Hamming codes of bytearrays (useful for sending strings over an unreliable network, for instance)
 
 def bytes_to_bits(byte_stream):
 	"""
