@@ -1,5 +1,5 @@
 # hamming
-Implementation of Hamming codes for detecting up to 2 errors and correcting up to 1 error in a data bitstring of *arbitrary length*. These are known as "SECDED" (Single Error Correction, Double Error Detection) codes and are extremely popular in computer memory for handling random errors. For example, RAID-2 uses Hamming codes for its parity.
+Implementation of Hamming codes for detecting up to 2 errors and correcting up to 1 error in a data bitstring of *arbitrary length*. These are known as "SECDED" (Single Error Correction, Double Error Detection) codes and are extremely popular in computer memory for handling errors. For example, RAID-2 uses Hamming codes for its parity.
 
 **Files**
 
