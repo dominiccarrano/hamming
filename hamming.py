@@ -96,25 +96,26 @@ def decode(encoded):
 
 def num_parity_bits_needed(length):
 	"""
-	Returns the number of parity bits needed for a bitstring of size length, not
+	Returns the number of parity bits needed for a bitstring of size length, NOT
 	inclduing the parity bit over the entire sequence for double detection.
-
-	# POTENTIAL CODE (still buggy)
-	i = floor(log2(length))
-	n = next_power_of_two(length)
-	k = n - i - 1
-	return i if k > length else i + 1
 	"""
 	# TODO: generalize for any length (STILL IN PROGRESS)
 	# Algorithm
 	# set i = floor(lg(length))
 	# set n = to the next power of two after length
-	# set k = n - i - 1
+	# set k = n - lg(n) - 1
 	# if k > length, output i
 	# otherwise, output i + 1
-	if type(length) != int or length <= 0:
-		raise ValueError("Length must be a positive integer.")
-	elif length == 1:
+
+	# EX: len = 1
+	# n = 1
+	# i = 0
+	# k = 0
+	n = next_power_of_two(length)
+	i = floor(log2(n))
+	k = n - i - 1
+	return i if length <= k else i + 1	# determine which power of two "bin" we want
+	"""elif length == 1:
 		return 2
 	elif length <= 4:
 		return 3
@@ -138,6 +139,7 @@ def num_parity_bits_needed(length):
 		return 12
 	else:
 		raise ValueError("Bitstring length must be no greater than 1013 bits.")
+	"""
 
 def calculate_parity(data, parity):
 	"""
@@ -192,17 +194,19 @@ def extract_data(encoded):
 
 def next_power_of_two(x):
 	"""
-	Given a positive real number x, returns the next power of two after x.
+	Given an integer x, returns the next power of two after x.
 
 	>>> next_power_of_two(768)
 	1024
 	>>> next_power_of_two(4)
+	8
+	>>> next_power_of_two(3)
 	4
-	>>> next_power_of_two(63.9999)
-	64
 	"""
 	if x <= 0:
 		raise ValueError("Argument must be positive.")
+	elif is_power_of_two(x):
+		return x << 1
 	return 2 ** ceil(log2(x))
 
 def is_power_of_two(n):
