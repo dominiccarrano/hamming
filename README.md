@@ -15,7 +15,7 @@ A brief example:
 >>> from bitarray import bitarray
 >>> data = bitarray('101010')
 >>> data_with_parity = encode(data)
->>> data_with_parity[3] = not data_with_parity
->>> decode(data_with_parity)
+>>> data_with_parity[3] = not data_with_parity # data now has a single bit in error..
+>>> decode(data_with_parity)                   # but Hamming codes can correct it!
 bitarray('101010')
 ```
