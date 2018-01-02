@@ -11,8 +11,6 @@ https://en.wikipedia.org/wiki/Hamming_code
 https://en.wikipedia.org/wiki/Hamming_code#Hamming_codes_with_additional_parity_(SECDED)
 """
 
-# TODO: Goal - get this file under ~150 lines
-
 from bitarray import bitarray
 from math import floor, ceil, log2
 
@@ -99,47 +97,11 @@ def num_parity_bits_needed(length):
 	Returns the number of parity bits needed for a bitstring of size length, NOT
 	inclduing the parity bit over the entire sequence for double detection.
 	"""
-	# TODO: generalize for any length (STILL IN PROGRESS)
-	# Algorithm
-	# set i = floor(lg(length))
-	# set n = to the next power of two after length
-	# set k = n - lg(n) - 1
-	# if k > length, output i
-	# otherwise, output i + 1
-
-	# EX: len = 1
-	# n = 1
-	# i = 0
-	# k = 0
 	n = next_power_of_two(length)
-	i = floor(log2(n))
-	k = n - i - 1
-	return i if length <= k else i + 1	# determine which power of two "bin" we want
-	"""elif length == 1:
-		return 2
-	elif length <= 4:
-		return 3
-	elif length <= 11:
-		return 4
-	elif length <= 26:
-		return 5
-	elif length <= 57:
-		return 6
-	elif length <= 120:
-		return 7
-	elif length <= 247:
-		return 8
-	elif length <= 502:
-		return 9
-	elif length <= 1013:
-		return 10
-	elif length <= 2037: 
-		return 11
-	elif length <= 4084:
-		return 12
-	else:
-		raise ValueError("Bitstring length must be no greater than 1013 bits.")
-	"""
+	lower_bin = floor(log2(n))
+	upper_bin = lower_bin + 1
+	data_bit_boundary = n - lower_bin - 1					
+	return lower_bin if length <= data_bit_boundary else upper_bin
 
 def calculate_parity(data, parity):
 	"""
@@ -203,8 +165,8 @@ def next_power_of_two(x):
 	>>> next_power_of_two(3)
 	4
 	"""
-	if x <= 0:
-		raise ValueError("Argument must be positive.")
+	if (not (type(x) == int)) or (x <= 0):
+		raise ValueError("Argument must be a positive integer.")
 	elif is_power_of_two(x):
 		return x << 1
 	return 2 ** ceil(log2(x))
