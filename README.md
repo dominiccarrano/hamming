@@ -6,16 +6,17 @@ This implementation is geared toward generality, i.e. allowing the user to encod
 **Files**
 
 **hamming.py**: The implementation. The two functions encode() and decode() form the main API; the rest are helper functions.
+
 **tests.py**:   A set of unit tests written while implementing hamming.py to verify its functionality.
 
 Users only need import the encode and decode functions from the hamming module to use it. The code has been verified to pass all 40+ tests in tests.py, so it would be a good idea to run them on one's machine first as well.
 
 A brief example:
 ```python
->>> import hamming as hm
+>>> import hamming
 >>> data = bitarray('101010')
->>> data_with_parity = encode(data)
+>>> data_with_parity = hamming.encode(data)
 >>> data_with_parity[3] = not data_with_parity  # the data now has a single bit in error..
->>> decode(data_with_parity)                    # but the hamming codes can recover the original!
+>>> hamming.decode(data_with_parity)            # but the hamming codes can recover the original!
 bitarray('101010')
 ```
