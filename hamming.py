@@ -4,7 +4,7 @@ Author:		Dominic Carrano (carrano.dominic@gmail.com)
 Created:	December 18, 2017
 
 Implementation of Hamming single error correction, double error detection
-(SECDED) codes for bitstrings, which are represented as Python bitarrays.
+(SECDED) codes for arbitrary length bitstrings, represented as Python bitarrays.
 
 For more, see: 
 https://en.wikipedia.org/wiki/Hamming_code
@@ -29,7 +29,7 @@ def encode(data):
 	# cache due to constant reuse
 	data_length     = len(data) 
 	num_parity_bits = num_parity_bits_needed(data_length)
-	encoded_length  = data_length + num_parity_bits + 1 # need plus 1 for parity bit over entire sequence
+	encoded_length  = data_length + num_parity_bits + 1 # need +1 for overall parity
 
 	# the Hamming SECDED encoded bitstring
 	encoded = bitarray(encoded_length) 
@@ -53,18 +53,12 @@ def encode(data):
 
 def decode(encoded):
 	"""
-	Takes in a Hamming SECDED encoded bitstring and returns the original data bitstring,
-	correcting single errors (with no reporting) and reporting if two errors are found.
-
-	Parameters
-	encoded: The parity-encoded bitsting to decode.
-
-	Throws
-	ValueError: if two errors are detected.
+	Given a bitstring "encoded" with Hamming SECDED parity, returns the original data bitstring,
+	correcting single errors and reporting if two errors are found.
 	"""
 	encoded_length  = len(encoded)
 	num_parity_bits = int(log2(encoded_length))
-	index_of_error  = 0 # the bit in error
+	index_of_error  = 0 # index of bit in error, relative to parity-encoded bitstring
 
 	# the original data bits, which may be corrupted
 	decoded = extract_data(encoded)
@@ -94,8 +88,8 @@ def decode(encoded):
 
 def num_parity_bits_needed(length):
 	"""
-	Returns the number of parity bits needed for a bitstring of size length, NOT
-	inclduing the parity bit over the entire sequence for double detection.
+	Given the length of a DATA bitstring, returns the number of parity bits needed for Hamming SEC codes.
+	An additional parity bit beyond this number of parity bits is needed to achieve SECDED codes.
 	"""
 	n = next_power_of_two(length)
 	lower_bin = floor(log2(n))
@@ -130,16 +124,14 @@ def data_bits_covered(parity, lim):
 	if not is_power_of_two(parity):
 		raise ValueError("All hamming parity bits are indexed by powers of two.")
 
-	# use 1-based indexing for simpler computational logic, subtract 1 in body of loop
-	# to get proper zero-based result
-	data_index  = 1		# the data bit we're currently at
-	total_index = 3 	# index of bit if it were in the parity-encoded bitstring - 
-						# the first two bits are p1 and p2, so we start at 3
+	# use 1-based indexing for simpler computational logic
+	data_index  = 1		# bit we're currently at in the DATA bitstring
+	total_index = 3 	# bit we're currently at in the OVERALL bitstring
 
 	while data_index <= lim:
 		curr_bit_is_data = not is_power_of_two(total_index)
 		if curr_bit_is_data and (total_index % (parity << 1)) >= parity:	
-			yield data_index - 1						# adjust output to be zero indexed
+			yield data_index - 1 # adjust output to be zero indexed
 		data_index += curr_bit_is_data
 		total_index += 1
 	return None
@@ -162,8 +154,6 @@ def next_power_of_two(x):
 	1024
 	>>> next_power_of_two(4)
 	8
-	>>> next_power_of_two(3)
-	4
 	"""
 	if (not (type(x) == int)) or (x <= 0):
 		raise ValueError("Argument must be a positive integer.")
@@ -173,8 +163,8 @@ def next_power_of_two(x):
 
 def is_power_of_two(n):
 	"""
-	Returns true if the given non-negative integer n is a power of two.
-	Algorithm credit: https://stackoverflow.com/questions/600293/how-to-check-if-a-number-is-a-power-of-2
+	Returns if the given non-negative integer n is a power of two.
+	Credit: https://stackoverflow.com/questions/600293/how-to-check-if-a-number-is-a-power-of-2
 	"""
 	return (not (n == 0)) and ((n & (n - 1)) == 0)
 
@@ -208,7 +198,7 @@ def bits_to_bytes(bits):
 	"""
 	Converts the given bitarray bits to a bytearray. 
 
-	Assumes the last len(bits) - len(bits) / 8 * 8 bits are to  be interpreted as the least 
+	Assumes the bits of the last byte or fraction of a byte are to be interpreted as the least 
 	significant bits of the last byte of data, e.g. 0b100 would map to the byte 0b00000100.
 	"""
 	out = bytearray()
