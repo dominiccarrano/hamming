@@ -1,7 +1,5 @@
 # hamming
-Implementation of Hamming codes for detecting up to 2 errors and correcting up to 1 error in a data bitstring. These are known as "SECDED" (Single Error Correction, Double Error Detection) codes and are extremely popular in computer memory for handling random errors. For example, RAID-2 uses Hamming codes for its parity.
-
-This implementation is geared toward generality, i.e. allowing the user to encode/decode bitstrings of arbitrary length, and requires they be passed in as Python bitarray objects. An alternative implemenation might focus on implementing a specific block-size Hamming code (e.g. the popular Hamming(7, 4) code) or take the linear algebra approach to such an implementation but here we focus on a more general version.
+Implementation of Hamming codes for detecting up to 2 errors and correcting up to 1 error in a data bitstring of *arbitrary length*. These are known as "SECDED" (Single Error Correction, Double Error Detection) codes and are extremely popular in computer memory for handling random errors. For example, RAID-2 uses Hamming codes for its parity.
 
 **Files**
 
