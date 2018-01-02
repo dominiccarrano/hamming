@@ -17,7 +17,7 @@ BITS_PER_BYTE = 8
 
 # CORE API
 
-def encode(data):
+def encode(data: bitarray):
 	"""
 	Given a bitstring 'data', returns a new bitstring containing the original bits
 	and Hamming (even) parity bits to allow for SECDED.
@@ -47,7 +47,7 @@ def encode(data):
 	# all done!
 	return encoded
 
-def decode(encoded):
+def decode(encoded: bitarray):
 	"""
 	Given a bitstring 'encoded' with Hamming SECDED parity bits, returns the original data bitstring,
 	correcting single errors and reporting if two errors are found.
@@ -82,7 +82,7 @@ def decode(encoded):
 
 # HELPER FUNCTIONS - The functions' names begin with an underscore to denote these being module private
 
-def _num_parity_bits_needed(length):
+def _num_parity_bits_needed(length: int):
 	"""
 	Given the length of a DATA bitstring, returns the number of parity bits needed for Hamming SEC codes.
 	An additional parity bit beyond this number of parity bits is needed to achieve SECDED codes.
@@ -93,7 +93,7 @@ def _num_parity_bits_needed(length):
 	data_bit_boundary = n - lower_bin - 1					
 	return lower_bin if length <= data_bit_boundary else upper_bin
 
-def _calculate_parity(data, parity):
+def _calculate_parity(data: bitarray, parity: int):
 	"""
 	Calculates the specified Hamming parity bit (1, 2, 4, 8, etc.) for the given data.
 	Assumes even parity to allow for easier computation of parity using XOR.
@@ -111,7 +111,7 @@ def _calculate_parity(data, parity):
 			retval ^= data[data_index]
 	return retval
 
-def _data_bits_covered(parity, lim):
+def _data_bits_covered(parity: int, lim: int):
 	"""
 	Yields the indices of all data bits covered by a specified parity bit in a bitstring
 	of length lim. The indices are relative to DATA BITSTRING ITSELF, NOT including
@@ -132,7 +132,7 @@ def _data_bits_covered(parity, lim):
 		total_index += 1
 	return None
 
-def _extract_data(encoded):
+def _extract_data(encoded: bitarray):
 	"""
 	Assuming encoded is a Hamming SECDED encoded bitstring, returns the substring that is the data bits.
 	"""
@@ -142,29 +142,29 @@ def _extract_data(encoded):
 			data.append(encoded[i])
 	return data
 
-def _next_power_of_two(x):
+def _next_power_of_two(n: int):
 	"""
-	Given an integer x, returns the next power of two after x.
+	Given an integer n, returns the next power of two after n.
 
 	>>> _next_power_of_two(768)
 	1024
 	>>> _next_power_of_two(4)
 	8
 	"""
-	if (not (type(x) == int)) or (x <= 0):
+	if (not (type(n) == int)) or (n <= 0):
 		raise ValueError("Argument must be a positive integer.")
-	elif _is_power_of_two(x):
-		return x << 1
-	return 2 ** ceil(log2(x))
+	elif _is_power_of_two(n):
+		return n << 1
+	return 2 ** ceil(log2(n))
 
-def _is_power_of_two(n):
+def _is_power_of_two(n: int):
 	"""
 	Returns if the given non-negative integer n is a power of two.
 	Credit: https://stackoverflow.com/questions/600293/how-to-check-if-a-number-is-a-power-of-2
 	"""
 	return (not (n == 0)) and ((n & (n - 1)) == 0)
 
-def _powers_of_two(n):
+def _powers_of_two(n: int):
 	"""
 	Yields the first n powers of two.
 
@@ -181,7 +181,7 @@ def _powers_of_two(n):
 # Further utility functions - not used anywhere in hamming.py, but would be useful for dealing with
 # Hamming codes of bytearrays (useful for sending strings over an unreliable network, for instance)
 
-def bytes_to_bits(byte_stream):
+def bytes_to_bits(byte_stream: bytearray):
 	"""
 	Converts the given bytearray to a bitarray by converting  each successive byte into its 
 	appropriate binary data bits and appending them to the bitarray.
@@ -193,7 +193,7 @@ def bytes_to_bits(byte_stream):
 			out.append(0 if bit == '0' else 1) # note that all bits go to 1 if we just append bit, since it's a non-null string
 	return out
 
-def bits_to_bytes(bits):
+def bits_to_bytes(bits: bitarray):
 	"""
 	Converts the given bitarray bits to a bytearray. 
 
