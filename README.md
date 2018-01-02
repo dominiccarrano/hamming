@@ -13,10 +13,11 @@ Users only need import the encode and decode functions from the hamming module t
 
 A brief example:
 ```python
->>> import hamming
+>>> from hamming import encode, decode
+>>> from bitarray import bitarray
 >>> data = bitarray('101010')
->>> data_with_parity = hamming.encode(data)
->>> data_with_parity[3] = not data_with_parity  # the data now has a single bit in error..
->>> hamming.decode(data_with_parity)            # but the hamming codes can recover the original!
+>>> data_with_parity = encode(data)
+>>> data_with_parity[3] = not data_with_parity
+>>> decode(data_with_parity)
 bitarray('101010')
 ```
