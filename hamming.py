@@ -64,7 +64,7 @@ def decode(encoded):
 	"""
 	encoded_length  = len(encoded)
 	num_parity_bits = int(log2(encoded_length))
-	index_of_error  = 0								# the bit in error
+	index_of_error  = 0 # the bit in error
 
 	# the original data bits, which may be corrupted
 	decoded = extract_data(encoded)
@@ -76,18 +76,18 @@ def decode(encoded):
 
 	# check individual parities
 	for parity_bit_index in powers_of_two(num_parity_bits):
-		expected = calculate_parity(decoded, parity_bit_index) # TODO: no need for 'data_bits' variable if we had a version of calculate_parity relative to the total bitstring
+		expected = calculate_parity(decoded, parity_bit_index)
 		actual   = encoded[parity_bit_index]
 		if not expected == actual:
 			index_of_error += parity_bit_index
 
 	# report results
-	if index_of_error and overall_correct:			# two errors found
+	if index_of_error and overall_correct:          # two errors found
 		raise ValueError("Two errors detected.")
-	elif index_of_error and not overall_correct:	# one error found - flip the bit in error and we're good
+	elif index_of_error and not overall_correct:    # one error found - flip the bit in error and we're good
 		encoded[index_of_error] = not encoded[index_of_error]
 
-	decoded = extract_data(encoded)					# extract new, corrected data and return it
+	decoded = extract_data(encoded)                 # extract new, corrected data and return it
 	return decoded
 
 # HELPER FUNCTIONS
@@ -111,7 +111,7 @@ def calculate_parity(data, parity):
 	If 0 is passed in to parity, then the overall parity is computed - that is, parity over
 	the entire sequence.
 	"""
-	retval = 0 		# 0 is the XOR identity
+	retval = 0 # 0 is the XOR identity
 
 	if parity == 0: # special case - compute the overall parity
 		for bit in data:
