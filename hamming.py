@@ -28,25 +28,25 @@ def encode(data):
 	"""
 	# cache due to constant reuse
 	data_length     = len(data) 
-	num_parity_bits = num_parity_bits_needed(data_length)
-	encoded_length  = data_length + num_parity_bits + 1 # need +1 for overall parity
+	num_parity_bits = _num_parity_bits_needed(data_length)
+	encoded_length  = data_length + num_parity_bits + 1 # need +1 for the overall parity bit
 
 	# the Hamming SECDED encoded bitstring
 	encoded = bitarray(encoded_length) 
 	
 	# set parity bits
-	for parity_bit_index in powers_of_two(num_parity_bits):
-		encoded[parity_bit_index] = calculate_parity(data, parity_bit_index)
+	for parity_bit_index in _powers_of_two(num_parity_bits):
+		encoded[parity_bit_index] = _calculate_parity(data, parity_bit_index)
 	
 	# set data bits
 	data_index = 0
 	for encoded_index in range(3, len(encoded)): # start at 3 instead of 1 to skip first two parity bits
-		if not is_power_of_two(encoded_index):
+		if not _is_power_of_two(encoded_index):
 			encoded[encoded_index] = data[data_index]
 			data_index += 1
 
-	# compute and set overall parity for the entire encoded data, not including the overall parity bit itself
-	encoded[0] = calculate_parity(encoded[1:], 0)
+	# compute and set overall parity for the entire encoded data (not including the overall parity bit itself)
+	encoded[0] = _calculate_parity(encoded[1:], 0)
 
 	# all done!
 	return encoded
@@ -61,16 +61,16 @@ def decode(encoded):
 	index_of_error  = 0 # index of bit in error, relative to parity-encoded bitstring
 
 	# the original data bits, which may be corrupted
-	decoded = extract_data(encoded)
+	decoded = _extract_data(encoded)
 
-	# check overall parity
-	overall_expected = calculate_parity(encoded[1:], 0)
+	# check overall parity bit
+	overall_expected = _calculate_parity(encoded[1:], 0)
 	overall_actual   = encoded[0]
 	overall_correct  = overall_expected == overall_actual
 
-	# check individual parities
-	for parity_bit_index in powers_of_two(num_parity_bits):
-		expected = calculate_parity(decoded, parity_bit_index)
+	# check individual parities - each parity bit's index (besides overall parity) is a power of two
+	for parity_bit_index in _powers_of_two(num_parity_bits):
+		expected = _calculate_parity(decoded, parity_bit_index)
 		actual   = encoded[parity_bit_index]
 		if not expected == actual:
 			index_of_error += parity_bit_index
@@ -81,23 +81,23 @@ def decode(encoded):
 	elif index_of_error and not overall_correct:    # one error found - flip the bit in error and we're good
 		encoded[index_of_error] = not encoded[index_of_error]
 
-	decoded = extract_data(encoded)                 # extract new, corrected data and return it
+	decoded = _extract_data(encoded)                 # extract new, corrected data and return it
 	return decoded
 
-# HELPER FUNCTIONS
+# HELPER FUNCTIONS - The functions' names begin with an underscore to denote these being module private
 
-def num_parity_bits_needed(length):
+def _num_parity_bits_needed(length):
 	"""
 	Given the length of a DATA bitstring, returns the number of parity bits needed for Hamming SEC codes.
 	An additional parity bit beyond this number of parity bits is needed to achieve SECDED codes.
 	"""
-	n = next_power_of_two(length)
+	n = _next_power_of_two(length)
 	lower_bin = floor(log2(n))
 	upper_bin = lower_bin + 1
 	data_bit_boundary = n - lower_bin - 1					
 	return lower_bin if length <= data_bit_boundary else upper_bin
 
-def calculate_parity(data, parity):
+def _calculate_parity(data, parity):
 	"""
 	Calculates the specified Hamming parity bit (1, 2, 4, 8, etc.) for the given data.
 	Assumes even parity to allow for easier computation of parity using XOR.
@@ -111,17 +111,17 @@ def calculate_parity(data, parity):
 		for bit in data:
 			retval ^= bit
 	else:
-		for data_index in data_bits_covered(parity, len(data)):
+		for data_index in _data_bits_covered(parity, len(data)):
 			retval ^= data[data_index]
 	return retval
 
-def data_bits_covered(parity, lim):
+def _data_bits_covered(parity, lim):
 	"""
 	Yields the indices of all data bits covered by a specified parity bit in a bitstring
 	of length lim. The indices are relative to DATA BITSTRING ITSELF, NOT including
 	parity bits.
 	"""
-	if not is_power_of_two(parity):
+	if not _is_power_of_two(parity):
 		raise ValueError("All hamming parity bits are indexed by powers of two.")
 
 	# use 1-based indexing for simpler computational logic
@@ -129,50 +129,50 @@ def data_bits_covered(parity, lim):
 	total_index = 3 	# bit we're currently at in the OVERALL bitstring
 
 	while data_index <= lim:
-		curr_bit_is_data = not is_power_of_two(total_index)
+		curr_bit_is_data = not _is_power_of_two(total_index)
 		if curr_bit_is_data and (total_index % (parity << 1)) >= parity:	
 			yield data_index - 1 # adjust output to be zero indexed
 		data_index += curr_bit_is_data
 		total_index += 1
 	return None
 
-def extract_data(encoded):
+def _extract_data(encoded):
 	"""
 	Assuming encoded is a Hamming SECDED encoded bitstring, returns the substring that is the data bits.
 	"""
 	data = bitarray()
 	for i in range(3, len(encoded)):
-		if not is_power_of_two(i):
+		if not _is_power_of_two(i):
 			data.append(encoded[i])
 	return data
 
-def next_power_of_two(x):
+def _next_power_of_two(x):
 	"""
 	Given an integer x, returns the next power of two after x.
 
-	>>> next_power_of_two(768)
+	>>> _next_power_of_two(768)
 	1024
-	>>> next_power_of_two(4)
+	>>> _next_power_of_two(4)
 	8
 	"""
 	if (not (type(x) == int)) or (x <= 0):
 		raise ValueError("Argument must be a positive integer.")
-	elif is_power_of_two(x):
+	elif _is_power_of_two(x):
 		return x << 1
 	return 2 ** ceil(log2(x))
 
-def is_power_of_two(n):
+def _is_power_of_two(n):
 	"""
 	Returns if the given non-negative integer n is a power of two.
 	Credit: https://stackoverflow.com/questions/600293/how-to-check-if-a-number-is-a-power-of-2
 	"""
 	return (not (n == 0)) and ((n & (n - 1)) == 0)
 
-def powers_of_two(n):
+def _powers_of_two(n):
 	"""
 	Yields the first n powers of two.
 
-	>>> [x for x in powers_of_two(5)]
+	>>> [x for x in _powers_of_two(5)]
 	[1, 2, 4, 8, 16]
 	"""
 	power, i = 1, 0
@@ -181,6 +181,9 @@ def powers_of_two(n):
 		power <<= 1
 		i += 1
 	return None
+
+# Further utility functions - not used anywhere in hamming.py, but would be useful for dealing with
+# Hamming codes of bytearrays (e.g., strings) that could be transmitted over a network, for instance
 
 def bytes_to_bits(byte_stream):
 	"""

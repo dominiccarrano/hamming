@@ -74,81 +74,81 @@ def bytes_to_bits_tests():
 	c = bytes_to_bits_test3()
 	return (a[0] + b[0] + c[0], a[1] + b[1] + c[1])
 
-# tests for hamming.data_bits_covered
+# tests for hamming._data_bits_covered
 
-def data_bits_covered_test1():
-	actual = [x for x in hamming.data_bits_covered(1, 14)]
+def _data_bits_covered_test1():
+	actual = [x for x in hamming._data_bits_covered(1, 14)]
 	expected = [0, 1, 3, 4, 6, 8, 10, 11, 13]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test1 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test1 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test2():
-	actual = [x for x in hamming.data_bits_covered(2, 7)]
+def _data_bits_covered_test2():
+	actual = [x for x in hamming._data_bits_covered(2, 7)]
 	expected = [0, 2, 3, 5, 6]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test2 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test2 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test3():
-	actual = [x for x in hamming.data_bits_covered(1, 33)]
+def _data_bits_covered_test3():
+	actual = [x for x in hamming._data_bits_covered(1, 33)]
 	expected = [0, 1, 3, 4, 6, 8, 10, 11, 13, 15, 17, 19, 21, 23, 25, 26, 28, 30, 32]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test4():
-	actual = [x for x in hamming.data_bits_covered(1, 1)]
+def _data_bits_covered_test4():
+	actual = [x for x in hamming._data_bits_covered(1, 1)]
 	expected = [0]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test5():
-	actual = [x for x in hamming.data_bits_covered(2, 1)]
+def _data_bits_covered_test5():
+	actual = [x for x in hamming._data_bits_covered(2, 1)]
 	expected = [0]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test6():
-	actual = [x for x in hamming.data_bits_covered(4, 1)]
+def _data_bits_covered_test6():
+	actual = [x for x in hamming._data_bits_covered(4, 1)]
 	expected = []
-	return (0, "") if actual == expected else (1, "data_bits_covered_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test7():
-	actual = [x for x in hamming.data_bits_covered(4, 15)]
+def _data_bits_covered_test7():
+	actual = [x for x in hamming._data_bits_covered(4, 15)]
 	expected = [1, 2, 3, 7, 8, 9, 10, 14]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test8():
-	actual = [x for x in hamming.data_bits_covered(4, 14)]
+def _data_bits_covered_test8():
+	actual = [x for x in hamming._data_bits_covered(4, 14)]
 	expected = [1, 2, 3, 7, 8, 9, 10]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test9():
-	actual = [x for x in hamming.data_bits_covered(8, 13)]
+def _data_bits_covered_test9():
+	actual = [x for x in hamming._data_bits_covered(8, 13)]
 	expected = [4, 5, 6, 7, 8, 9, 10]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test9 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test9 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test10():
-	actual = [x for x in hamming.data_bits_covered(8, 3)]
+def _data_bits_covered_test10():
+	actual = [x for x in hamming._data_bits_covered(8, 3)]
 	expected = []
-	return (0, "") if actual == expected else (1, "data_bits_covered_test10 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test10 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test11():
-	actual = [x for x in hamming.data_bits_covered(16, 11)]
+def _data_bits_covered_test11():
+	actual = [x for x in hamming._data_bits_covered(16, 11)]
 	expected = []
-	return (0, "") if actual == expected else (1, "data_bits_covered_test11 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test11 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_test12():
-	actual = [x for x in hamming.data_bits_covered(16, 24)]
+def _data_bits_covered_test12():
+	actual = [x for x in hamming._data_bits_covered(16, 24)]
 	expected = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-	return (0, "") if actual == expected else (1, "data_bits_covered_test12 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_data_bits_covered_test12 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def data_bits_covered_tests():
-	a = data_bits_covered_test1()
-	b = data_bits_covered_test2()
-	c = data_bits_covered_test3()
-	d = data_bits_covered_test4()
-	e = data_bits_covered_test5()
-	f = data_bits_covered_test6()
-	g = data_bits_covered_test7()
-	h = data_bits_covered_test8()
-	i = data_bits_covered_test9()
-	j = data_bits_covered_test10()
-	k = data_bits_covered_test11()
-	l = data_bits_covered_test12()
+def _data_bits_covered_tests():
+	a = _data_bits_covered_test1()
+	b = _data_bits_covered_test2()
+	c = _data_bits_covered_test3()
+	d = _data_bits_covered_test4()
+	e = _data_bits_covered_test5()
+	f = _data_bits_covered_test6()
+	g = _data_bits_covered_test7()
+	h = _data_bits_covered_test8()
+	i = _data_bits_covered_test9()
+	j = _data_bits_covered_test10()
+	k = _data_bits_covered_test11()
+	l = _data_bits_covered_test12()
 	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0] + h[0] + i[0] + j[0] + k[0] + l[0], \
 		a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1] + h[1] + i[1] + j[1] + k[1] + l[1])
 
@@ -204,111 +204,111 @@ def decode_tests():
 	c = decode_test3()
 	return (a[0] + b[0] + c[0], a[1] + b[1] + c[1])
 
-# tests for hamming.num_parity_bits_needed
+# tests for hamming._num_parity_bits_needed
 
-def num_parity_bits_needed_test1():
-	actual = hamming.num_parity_bits_needed(1)
+def _num_parity_bits_needed_test1():
+	actual = hamming._num_parity_bits_needed(1)
 	expected = 2
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test1 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test1 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test2():
-	actual = hamming.num_parity_bits_needed(2)
+def _num_parity_bits_needed_test2():
+	actual = hamming._num_parity_bits_needed(2)
 	expected = 3
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test2 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test2 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test3():
-	actual = hamming.num_parity_bits_needed(3)
+def _num_parity_bits_needed_test3():
+	actual = hamming._num_parity_bits_needed(3)
 	expected = 3
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test4():
-	actual = hamming.num_parity_bits_needed(4)
+def _num_parity_bits_needed_test4():
+	actual = hamming._num_parity_bits_needed(4)
 	expected = 3
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test5():
-	actual = hamming.num_parity_bits_needed(5)
+def _num_parity_bits_needed_test5():
+	actual = hamming._num_parity_bits_needed(5)
 	expected = 4
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test6():
-	actual = hamming.num_parity_bits_needed(502)
+def _num_parity_bits_needed_test6():
+	actual = hamming._num_parity_bits_needed(502)
 	expected = 9
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test7():
-	actual = hamming.num_parity_bits_needed(503)
+def _num_parity_bits_needed_test7():
+	actual = hamming._num_parity_bits_needed(503)
 	expected = 10
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test8():
-	actual = hamming.num_parity_bits_needed(10)
+def _num_parity_bits_needed_test8():
+	actual = hamming._num_parity_bits_needed(10)
 	expected = 4
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test9():
-	actual = hamming.num_parity_bits_needed(11)
+def _num_parity_bits_needed_test9():
+	actual = hamming._num_parity_bits_needed(11)
 	expected = 4
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test9 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test9 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test10():
-	actual = hamming.num_parity_bits_needed(12)
+def _num_parity_bits_needed_test10():
+	actual = hamming._num_parity_bits_needed(12)
 	expected = 5
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test10 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test10 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test11():
-	actual = hamming.num_parity_bits_needed(56)
+def _num_parity_bits_needed_test11():
+	actual = hamming._num_parity_bits_needed(56)
 	expected = 6
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test11 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test11 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test12():
-	actual = hamming.num_parity_bits_needed(57)
+def _num_parity_bits_needed_test12():
+	actual = hamming._num_parity_bits_needed(57)
 	expected = 6
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test12 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test12 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test13():
-	actual = hamming.num_parity_bits_needed(58)
+def _num_parity_bits_needed_test13():
+	actual = hamming._num_parity_bits_needed(58)
 	expected = 7
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test13 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test13 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test14():
-	actual = hamming.num_parity_bits_needed(59)
+def _num_parity_bits_needed_test14():
+	actual = hamming._num_parity_bits_needed(59)
 	expected = 7
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test14 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test14 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test15():
-	actual = hamming.num_parity_bits_needed(63)
+def _num_parity_bits_needed_test15():
+	actual = hamming._num_parity_bits_needed(63)
 	expected = 7
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test15 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test15 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test16():
-	actual = hamming.num_parity_bits_needed(64)
+def _num_parity_bits_needed_test16():
+	actual = hamming._num_parity_bits_needed(64)
 	expected = 7
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test16 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test16 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_test17():
-	actual = hamming.num_parity_bits_needed(65)
+def _num_parity_bits_needed_test17():
+	actual = hamming._num_parity_bits_needed(65)
 	expected = 7
-	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test17 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+	return (0, "") if actual == expected else (1, "_num_parity_bits_needed_test17 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
-def num_parity_bits_needed_tests():
-	a = num_parity_bits_needed_test1()
-	b = num_parity_bits_needed_test2()
-	c = num_parity_bits_needed_test3()
-	d = num_parity_bits_needed_test4()
-	e = num_parity_bits_needed_test5()
-	f = num_parity_bits_needed_test6()
-	g = num_parity_bits_needed_test7()
-	h = num_parity_bits_needed_test8()
-	i = num_parity_bits_needed_test9()
-	j = num_parity_bits_needed_test10()
-	k = num_parity_bits_needed_test11()
-	l = num_parity_bits_needed_test12()
-	m = num_parity_bits_needed_test13()
-	n = num_parity_bits_needed_test14()
-	o = num_parity_bits_needed_test15()
-	p = num_parity_bits_needed_test16()
-	q = num_parity_bits_needed_test17()
+def _num_parity_bits_needed_tests():
+	a = _num_parity_bits_needed_test1()
+	b = _num_parity_bits_needed_test2()
+	c = _num_parity_bits_needed_test3()
+	d = _num_parity_bits_needed_test4()
+	e = _num_parity_bits_needed_test5()
+	f = _num_parity_bits_needed_test6()
+	g = _num_parity_bits_needed_test7()
+	h = _num_parity_bits_needed_test8()
+	i = _num_parity_bits_needed_test9()
+	j = _num_parity_bits_needed_test10()
+	k = _num_parity_bits_needed_test11()
+	l = _num_parity_bits_needed_test12()
+	m = _num_parity_bits_needed_test13()
+	n = _num_parity_bits_needed_test14()
+	o = _num_parity_bits_needed_test15()
+	p = _num_parity_bits_needed_test16()
+	q = _num_parity_bits_needed_test17()
 	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0] + h[0] + i[0] + j[0] + k[0] + l[0] + m[0] + n[0] + o[0] + p[0] + q[0], \
 		a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1] + h[1] + i[1] + j[1] + k[1] + l[1] + m[1] + n[1] + o[1] + p[1] + q[1])
 
@@ -317,10 +317,10 @@ def num_parity_bits_needed_tests():
 def run_tests():
 	a = bits_to_bytes_tests()
 	b = bytes_to_bits_tests()
-	c = data_bits_covered_tests()
+	c = _data_bits_covered_tests()
 	d = decode_tests()
 	e = encode_tests()
-	f = num_parity_bits_needed_tests()
+	f = _num_parity_bits_needed_tests()
 	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1])
 
 def main():
