@@ -14,7 +14,7 @@ https://en.wikipedia.org/wiki/Hamming_code#Hamming_codes_with_additional_parity_
 # TODO: Goal - get this file under ~150 lines
 
 from bitarray import bitarray
-from math import log2
+from math import floor, ceil, log2
 
 BITS_PER_BYTE = 8
 
@@ -92,15 +92,26 @@ def decode(encoded):
 	decoded = extract_data(encoded)					# extract new, corrected data and return it
 	return decoded
 
-
 # HELPER FUNCTIONS
 
 def num_parity_bits_needed(length):
 	"""
 	Returns the number of parity bits needed for a bitstring of size length, not
 	inclduing the parity bit over the entire sequence for double detection.
+
+	# POTENTIAL CODE (still buggy)
+	i = floor(log2(length))
+	n = next_power_of_two(length)
+	k = n - i - 1
+	return i if k > length else i + 1
 	"""
-	# TODO: generalize for any length
+	# TODO: generalize for any length (STILL IN PROGRESS)
+	# Algorithm
+	# set i = floor(lg(length))
+	# set n = to the next power of two after length
+	# set k = n - i - 1
+	# if k > length, output i
+	# otherwise, output i + 1
 	if type(length) != int or length <= 0:
 		raise ValueError("Length must be a positive integer.")
 	elif length == 1:
@@ -127,7 +138,6 @@ def num_parity_bits_needed(length):
 		return 12
 	else:
 		raise ValueError("Bitstring length must be no greater than 1013 bits.")
-
 
 def calculate_parity(data, parity):
 	"""
@@ -179,6 +189,21 @@ def extract_data(encoded):
 		if not is_power_of_two(i):
 			data.append(encoded[i])
 	return data
+
+def next_power_of_two(x):
+	"""
+	Given a positive real number x, returns the next power of two after x.
+
+	>>> next_power_of_two(768)
+	1024
+	>>> next_power_of_two(4)
+	4
+	>>> next_power_of_two(63.9999)
+	64
+	"""
+	if x <= 0:
+		raise ValueError("Argument must be positive.")
+	return 2 ** ceil(log2(x))
 
 def is_power_of_two(n):
 	"""

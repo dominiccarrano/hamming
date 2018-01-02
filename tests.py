@@ -10,7 +10,7 @@ from bitarray import bitarray
 from sys import stderr, stdout
 import hamming
 
-N_TESTS = 25 # total number of unit tests
+N_TESTS = 35 # total number of unit tests
 
 # tests for hamming.bits_to_bytes
 
@@ -203,6 +203,72 @@ def decode_tests():
 	c = decode_test3()
 	return (a[0] + b[0] + c[0], a[1] + b[1] + c[1])
 
+# tests for hamming.num_parity_bits_needed
+
+def num_parity_bits_needed_test1():
+	actual = hamming.num_parity_bits_needed(1)
+	expected = 2
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test1 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test2():
+	actual = hamming.num_parity_bits_needed(2)
+	expected = 3
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test2 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test3():
+	actual = hamming.num_parity_bits_needed(3)
+	expected = 3
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test4():
+	actual = hamming.num_parity_bits_needed(4)
+	expected = 3
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test5():
+	actual = hamming.num_parity_bits_needed(5)
+	expected = 4
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test6():
+	actual = hamming.num_parity_bits_needed(502)
+	expected = 9
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test7():
+	actual = hamming.num_parity_bits_needed(503)
+	expected = 10
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test8():
+	actual = hamming.num_parity_bits_needed(10)
+	expected = 4
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test9():
+	actual = hamming.num_parity_bits_needed(11)
+	expected = 4
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test9 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_test10():
+	actual = hamming.num_parity_bits_needed(12)
+	expected = 5
+	return (0, "") if actual == expected else (1, "num_parity_bits_needed_test10 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def num_parity_bits_needed_tests():
+	a = num_parity_bits_needed_test1()
+	b = num_parity_bits_needed_test2()
+	c = num_parity_bits_needed_test3()
+	d = num_parity_bits_needed_test4()
+	e = num_parity_bits_needed_test5()
+	f = num_parity_bits_needed_test6()
+	g = num_parity_bits_needed_test7()
+	h = num_parity_bits_needed_test8()
+	i = num_parity_bits_needed_test9()
+	j = num_parity_bits_needed_test10()
+	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0] + h[0] + i[0] + j[0], \
+		a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1] + h[1] + i[1] + j[1])
+
 # put it all together
 
 def run_tests():
@@ -211,7 +277,8 @@ def run_tests():
 	c = data_bits_covered_tests()
 	d = decode_tests()
 	e = encode_tests()
-	return (a[0] + b[0] + c[0] + d[0] + e[0], a[1] + b[1] + c[1] + d[1] + e[1])
+	f = num_parity_bits_needed_tests()
+	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1])
 
 def main():
 	total_failed, error_output = run_tests()
