@@ -11,7 +11,7 @@ from sys import stderr, stdout
 import hamming
 
 # total number of unit tests (for nice output format purposes when running)
-N_TESTS = 50
+N_TESTS = 52
 
 # tests for hamming.bits_to_bytes
 
@@ -197,6 +197,12 @@ def encode_test7():
 	expected = bitarray('0' * 4098) # 12 + 1 parity bits added
 	return (0, "") if actual == expected else (1, "encode_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
+def encode_test8():
+	data     = bitarray('0100')
+	actual   = hamming.encode(data)
+	expected = bitarray('11001100')
+	return (0, "") if actual == expected else (1, "encode_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
 def encode_tests():
 	a = encode_test1()
 	b = encode_test2()
@@ -205,7 +211,8 @@ def encode_tests():
 	e = encode_test5()
 	f = encode_test6()
 	g = encode_test7()
-	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1])
+	h = encode_test8()
+	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0] + h[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1] + h[1])
 
 # tests for hamming.decode
 
@@ -251,6 +258,12 @@ def decode_test7():
 	expected = bitarray('01100100011011110110110100101110011000110110111101101101')
 	return (0, "") if actual == expected else (1, "decode_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
+def decode_test8():
+	encoded  = bitarray('11011100')
+	actual   = hamming.decode(encoded)
+	expected = bitarray('0100')
+	return (0, "") if actual == expected else (1, "decode_test8 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
 def decode_tests():
 	a = decode_test1()
 	b = decode_test2()
@@ -259,7 +272,8 @@ def decode_tests():
 	e = decode_test5()
 	f = decode_test6()
 	g = decode_test7()
-	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1])
+	h = decode_test8()
+	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0] + h[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1] + h[1])
 
 # tests for hamming._num_parity_bits_needed
 
