@@ -10,8 +10,8 @@ from bitarray import bitarray
 from sys import stderr, stdout
 import hamming
 
-# total number of unit tests
-N_TESTS = 42 # hehe
+# total number of unit tests (for nice output format purposes when running)
+N_TESTS = 50
 
 # tests for hamming.bits_to_bytes
 
@@ -172,11 +172,40 @@ def encode_test3():
 	expected = bitarray('11000011') # p1 = 1, p2 = 0, p4 = 0, overall = 1
 	return (0, "") if actual == expected else (1, "encode_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
+def encode_test4():
+	data     = bitarray('0' * 17) # 17 zeros -> need 5 + 1 parity bits, all zero
+	actual   = hamming.encode(data)
+	expected = bitarray('0' * 23) # 6 parity bits added, all zero
+	return (0, "") if actual == expected else (1, "encode_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def encode_test5():
+	# (overall: 1) (p1: 1) (p2: 1) 0 (p4: 1) 110 (p8: 0) 0100011 (p16: 0) 011110110110100 (p32: 1) 101110011000110110111101101101
+	data     = bitarray('01100100011011110110110100101110011000110110111101101101') # 'dom.com' in ASCII binary
+	actual   = hamming.encode(data)
+	expected = bitarray('111011100010001100111101101101001101110011000110110111101101101') # 6 + 1 parity bits added
+	return (0, "") if actual == expected else (1, "encode_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def encode_test6():
+	data     = bitarray('1')
+	actual   = hamming.encode(data)
+	expected = bitarray('1111') # 2 + 1 parity bits added
+	return (0, "") if actual == expected else (1, "encode_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def encode_test7():
+	data     = bitarray('0' * 4084)
+	actual   = hamming.encode(data)
+	expected = bitarray('0' * 4098) # 12 + 1 parity bits added
+	return (0, "") if actual == expected else (1, "encode_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
 def encode_tests():
 	a = encode_test1()
 	b = encode_test2()
 	c = encode_test3()
-	return (a[0] + b[0] + c[0], a[1] + b[1] + c[1])
+	d = encode_test4()
+	e = encode_test5()
+	f = encode_test6()
+	g = encode_test7()
+	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1])
 
 # tests for hamming.decode
 
@@ -198,11 +227,40 @@ def decode_test3():
 	expected = bitarray('01100100110') 
 	return (0, "") if actual == expected else (1, "decode_test3 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
+def decode_test4():
+	encoded  = bitarray('1111') # no bits in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('1')
+	return (0, "") if actual == expected else (1, "decode_test4 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def decode_test5():
+	encoded  = bitarray('1' + ('0' * 4097)) # overall parity bit in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('0' * 4084)
+	return (0, "") if actual == expected else (1, "decode_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def decode_test6():
+	# TODO: Should be an error with parity-32 bit, but there isn't.. take a look at decode()
+	encoded  = bitarray('111011100010001100111101101101001101110011000110110111101101100') # last bit in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('01100100011011110110110100101110011000110110111101101101')
+	return (0, "") if actual == expected else (1, "decode_test6 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
+def decode_test7():
+	encoded  = bitarray('111011100010001100111101101101001101110011000110110111101101101') # no bits in error
+	actual   = hamming.decode(encoded)
+	expected = bitarray('01100100011011110110110100101110011000110110111101101101')
+	return (0, "") if actual == expected else (1, "decode_test7 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
+
 def decode_tests():
 	a = decode_test1()
 	b = decode_test2()
 	c = decode_test3()
-	return (a[0] + b[0] + c[0], a[1] + b[1] + c[1])
+	d = decode_test4()
+	e = decode_test5()
+	f = decode_test6()
+	g = decode_test7()
+	return (a[0] + b[0] + c[0] + d[0] + e[0] + f[0] + g[0], a[1] + b[1] + c[1] + d[1] + e[1] + f[1] + g[1])
 
 # tests for hamming._num_parity_bits_needed
 

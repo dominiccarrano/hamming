@@ -66,6 +66,7 @@ def decode(encoded: bitarray):
 
 	# check individual parities - each parity bit's index (besides overall parity) is a power of two
 	for parity_bit_index in _powers_of_two(num_parity_bits):
+		print(num_parity_bits)
 		expected = _calculate_parity(decoded, parity_bit_index)
 		actual   = encoded[parity_bit_index]
 		if not expected == actual:
@@ -76,7 +77,7 @@ def decode(encoded: bitarray):
 		raise ValueError("Two errors detected.")
 	elif index_of_error and not overall_correct:    # one error found - flip the bit in error and we're good
 		encoded[index_of_error] = not encoded[index_of_error]
-
+	print("error index: {0}".format(index_of_error))
 	decoded = _extract_data(encoded)                 # extract new, corrected data and return it
 	return decoded
 
