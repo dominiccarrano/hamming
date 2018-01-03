@@ -7,7 +7,7 @@ Implementation of Hamming codes for detecting up to 2 errors and correcting up t
 
 **tests.py**:   A set of unit tests written while implementing hamming.py to verify its functionality.
 
-Users only need import the encode and decode functions from the hamming module to make use of its full utility. The code has been verified to pass all 40+ tests in tests.py for Python 3.5+.
+Users only need import the encode and decode functions from the hamming module to make full use of it. The code has been verified to pass all 50+ unit tests in tests.py for Python 3.5+.
 
 A brief example:
 ```python
