@@ -240,7 +240,6 @@ def decode_test5():
 	return (0, "") if actual == expected else (1, "decode_test5 FAILED! Expected: {0}, Actual: {1}\n".format(expected, actual))
 
 def decode_test6():
-	# TODO: Should be an error with parity-32 bit, but there isn't.. take a look at decode()
 	encoded  = bitarray('111011100010001100111101101101001101110011000110110111101101100') # last bit in error
 	actual   = hamming.decode(encoded)
 	expected = bitarray('01100100011011110110110100101110011000110110111101101101')
